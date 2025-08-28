@@ -61,4 +61,7 @@ async function main() {
   }
 }
 
+export { getCoordinates, getWeather };
+
+
 main();
