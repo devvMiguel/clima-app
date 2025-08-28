@@ -55,29 +55,61 @@ npx ts-node src/index.ts
 4. Digite o nome da cidade quando solicitado:
 
 Example:
-
+```
 Entrada:
 Digite o nome da cidade: Recife
 
 Saída:
 🌤️ Temperatura atual em Recife: 28°C
+```
 
+Testes
+
+Este projeto conta com uma suíte de testes automatizados escritos em TypeScript usando Jest.
+Os testes verificam desde o funcionamento básico até casos extremos, garantindo maior confiabilidade.
+
+## ✅ Casos cobertos
+
+Geo Coordenadas (Geocoding)
+
+Cidade válida retorna latitude/longitude
+
+Cidade inexistente retorna erro apropriado
+
+API de geocoding fora do ar é tratada corretamente
+
+Clima (Weather)
+
+Cidade válida retorna temperatura atual
+
+API válida mas sem current_weather retorna erro apropriado
+
+API fora do ar (erro de rede) é tratada corretamente
+
+## Como rodar os testes
+
+ Rode os testes com:
+
+```
+npm test
+```
 
 ## Estrutura do projeto:
 
 ```
 clima-app/
-│── package.json
-│── tsconfig.json
-│── .gitignore
-│── src/
-│   ├── index.ts        # Ponto de entrada
-│   ├── api/            # Chamadas à API
-│   ├── services/       # Regras de negócio
-│   ├── utils/          # Funções auxiliares
-│   ├── types/          # Tipos TypeScript
-│   ├── ui/             # Entrada/saída com usuário
-│   └── config/         # Constantes e configurações
+├── package.json
+├── tsconfig.json
+├── .gitignore
+└── src/
+    ├── index.ts         # Ponto de entrada
+    ├── api/             # Chamadas à API
+    ├── services/        # Regras de negócio
+    ├── utils/           # Funções auxiliares
+    ├── types/           # Tipos TypeScript
+    ├── ui/              # Entrada/saída com usuário
+    ├── config/          # Constantes e configurações
+    └── tests/           # Testes unitários
 ```
 
 
