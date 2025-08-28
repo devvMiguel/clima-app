@@ -65,6 +65,7 @@ Saída:
 
 ## Estrutura do projeto:
 
+```
 clima-app/
 │── package.json
 │── tsconfig.json
@@ -77,7 +78,7 @@ clima-app/
 │   ├── types/          # Tipos TypeScript
 │   ├── ui/             # Entrada/saída com usuário
 │   └── config/         # Constantes e configurações
-
+```
 
 
 ## Desenvolvido por:
