@@ -73,10 +73,17 @@ Saída:
 ## ✅ Funcionalidades
 
 - Buscar **coordenadas (latitude/longitude)** de uma cidade.  
-- Consultar **temperatura atual**.  
+- Consultar **temperatura atual**.
+- Armazenar dados em cache por 1 hora para evitar chamadas repetidas à API.  
 - Tratar erros de entrada de usuário (cidades inválidas).  
 - Tratar erros de rede/API fora do ar.  
-- Registro de erros em arquivo de log.  
+- Registro de erros em arquivo de log.
+
+Benefício do cache:
+
+- Reduz o número de chamadas à API, economizando recursos e evitando limites de requisição.
+- Aumenta a velocidade das respostas para consultas repetidas à mesma cidade.
+- Mantém o aplicativo mais robusto em caso de instabilidade temporária da API.
 
 ---
 
