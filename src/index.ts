@@ -30,37 +30,27 @@ async function getCoordinates(city: string) {
 }
 
 
+// Cache simples em memória (chave: "lat,long")
+const weatherCache: Record<string, { data: { temperature: number }; timestamp: number }> = {};
+
 /**
- * Obtém a temperatura atual de uma localização específica
- * a partir da API Open-Meteo.
- *
- * Esta função realiza uma requisição HTTP para buscar dados
- * de clima atuais com base em latitude e longitude fornecidos.
+ * Obtém a temperatura atual de uma localização específica,
+ * usando cache de 1 hora para evitar chamadas desnecessárias à API.
  *
  * @param {number} latitude - Latitude da cidade/localização desejada.
  * @param {number} longitude - Longitude da cidade/localização desejada.
- *
- * @returns {Promise<{ temperature: number }>} - Objeto contendo:
- *   - `temperature`: temperatura atual em graus Celsius.
- *   (Outros atributos como `windspeed`, `winddirection` e `time`
- *    podem ser adicionados futuramente.)
- *
- * @throws {Error} - Lança erro nos seguintes casos:
- *   - Quando os dados de clima não estão disponíveis na resposta.
- *   - Quando a API retorna erro de status HTTP (ex: 404, 500).
- *   - Quando não há resposta da API (problema de rede/conexão).
- *   - Em erros inesperados no processamento da requisição.
- *
- * @example
- * ```ts
- * const clima = await getWeather(-8.05, -34.9); // Recife
- * console.log(`🌡️ Temperatura: ${clima.temperature}°C`);
- * // Saída esperada:
- * // 🌡️ Temperatura: 28°C
- * ```
+ * @returns {Promise<{ temperature: number }>} - Objeto contendo a temperatura.
  */
-// Função para buscar temperatura atual
 async function getWeather(latitude: number, longitude: number) {
+  const cacheKey = `${latitude},${longitude}`;
+  const oneHour = 60 * 60 * 1000;
+  const now = Date.now();
+
+  // Verifica se existe no cache e se ainda é válido
+  if (weatherCache[cacheKey] && now - weatherCache[cacheKey].timestamp < oneHour) {
+    return weatherCache[cacheKey].data;
+  }
+
   try {
     const response = await axios.get(CLIMA_API, {
       params: {
@@ -76,14 +66,19 @@ async function getWeather(latitude: number, longitude: number) {
       throw new Error("Dados de clima indisponíveis no momento.");
     }
 
-    return {
+    const result = {
       temperature: weather.temperature,
-      // windspeed: weather.windspeed,
-      // winddirection: weather.winddirection,
-      // time: weather.time,
     };
+
+    // Salva no cache
+    weatherCache[cacheKey] = {
+      data: result,
+      timestamp: now,
+    };
+
+    return result;
+
   } catch (error: any) {
-    // Tratamento de erros mais informativo
     if (error.response) {
       throw new Error(
         `Erro na API (${error.response.status}): ${error.response.statusText}`
